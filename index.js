@@ -1,10 +1,10 @@
 import express from "express";
-import mongoose from "mongoose";
+import mongoose, { get } from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import ErrorHandler from "./middleware/ErrorHandler.js";
+import errorHandler from "./middleware/ErrorHandler.js";
 // import Contact from "./Routes/ContactRoutes.js";
-
+import OrderRoute from "./routes/OrdersRoute.js";
 
 const app = express();
 app.use(cors());
@@ -13,15 +13,13 @@ dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/public", express.static("./public"));
-app.use(ErrorHandler);
 
 const PORT = process.env.PORT || 7550;
 
-
-
-mongoose.connect(process.env.MONGODB_URL)
+mongoose
+  .connect(process.env.MONGODB_URL)
   .then(() => {
-    console.log('MongoDB connected');
+    console.log("MongoDB connected");
     app.listen(PORT, () => {
       console.log(`Server is listening on port ${PORT}`);
     });
@@ -30,8 +28,8 @@ mongoose.connect(process.env.MONGODB_URL)
     console.error(`Error connecting to MongoDB: ${err.message}`);
   });
 
+app.use("/api/orders", OrderRoute);
 
-// app.use("/api/contacts", Contact);
 
 
 app.use("*", (req, res) => {
@@ -40,3 +38,5 @@ app.use("*", (req, res) => {
     message: "Page Not Found! Please enter a valid URL to proceed",
   });
 });
+
+app.use(errorHandler);
