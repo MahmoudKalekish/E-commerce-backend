@@ -75,6 +75,23 @@ export const categoryControlller = async (req, res) => {
     });
   }
 };
+// category count
+export const categoryCountController = async (req, res) => {
+  try {
+    const cattotal = await categoryModel.find({}).estimatedDocumentCount();
+    res.status(200).send({
+      success: true,
+      cattotal,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      message: "Error in category count",
+      error,
+      success: false,
+    });
+  }
+};
 
 // single category
 export const singleCategoryController = async (req, res) => {

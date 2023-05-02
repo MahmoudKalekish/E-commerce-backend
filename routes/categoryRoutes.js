@@ -6,6 +6,7 @@ import {
   deleteCategoryCOntroller,
   singleCategoryController,
   updateCategoryController,
+  categoryCountController,
 } from "../controllers/categoryController.js";
 
 const router = express.Router();
@@ -29,6 +30,10 @@ router.put(
 
 //getALl category
 router.get("/get-category", categoryControlller);
+
+//Count ALl category
+router.get("/count-category", categoryCountController);
+
 
 //single category
 router.get("/single-category/:slug", singleCategoryController);
